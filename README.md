@@ -1,0 +1,1 @@
+# barchar.js
