@@ -128,8 +128,6 @@ function barchart(data, barLabels, options, $parentElement) {
                 'font-size': options.titleLabelFontSize,
                 right: 0,
                 'text-align': 'center',
-                'padding-top': options.titleLabelFontSize * .2,
-
                 };
     $titleElement.css(css)
     $titleElement.html(options.title);
@@ -150,9 +148,22 @@ function barchart(data, barLabels, options, $parentElement) {
   }
 
   function buildBarLabels() {
-    for (let element of barLabels) {
+    let n = data.length;
+    let chartWidth = parseFloat($chartElement.css("width"));
+    let barWidth = (chartWidth - options.spacing * (n + 1))/n;
+    let css = { position: 'absolute',
+                left: options.spacing + barWidth / 2,
+                }
+    for (let i = 0; i < data.length; i++) {
       let $label = $("<div></div>")
+      $label.css(css)
+      $label.html(barLabels[i])
       $barLabelElement.append($label)
+      let currentWidth = parseFloat($label.css("width"));
+      let desiredLeft = parseFloat($label.css("left")) - currentWidth / 2
+      console.log(desiredLeft)
+      $label.css("left", desiredLeft)
+      css.left += barWidth + options.spacing;
     }
   }
 
@@ -170,12 +181,12 @@ function barchart(data, barLabels, options, $parentElement) {
 
 
 let options =  {height: 400,
-                width: 300,
-                spacing: 4,
+                width: 700,
+                spacing: 40,
                 lineNumber: 10,
                 valueLabelFontSize: 14,
 
-                title: 'Chart#1',
+                title: 'Urine',
                 titleLabelFontSize: 27,
 
                 barLabelFontSize: 10,
@@ -183,5 +194,5 @@ let options =  {height: 400,
                'background-color': 'lightgrey'
               };
 
-barchart([1,2,3,4], ['meow','piss','donkey','poo'],options, $("#chart"))
+barchart([1,2,3,4], ['peepee','piss','warmstream','tinkle'],options, $("#chart"))
 
