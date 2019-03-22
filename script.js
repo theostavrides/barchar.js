@@ -1,6 +1,12 @@
-function drawBarChart(data, options, $element) {
-  if (!($element instanceof jQuery)) {
-    $element = $(element);
+function drawBarChart(data, options, $parentElement) {
+  if (!($parentElement instanceof jQuery)) {
+    $parentElement = $($parentElement);
+  }
+
+  let $chartElement =  $("<div></div>")
+
+  function makeChartAndTitleAndLabelDivs() {
+    $chartElement.css(options.css);
   }
 
   function getBarHeight(bar) {
@@ -20,7 +26,7 @@ function drawBarChart(data, options, $element) {
                           }
                      };
     let $bar = $("<div></div>", attributes);
-    $element.append($bar)
+    $chartElement.append($bar)
   }
 
   function drawBars() {
@@ -42,34 +48,34 @@ function drawBarChart(data, options, $element) {
                              height: 1,
                              width: options.css.width,
                              bottom: maxBarHeight,
-                            'background-color': 'blue'
+                            'background-color': 'grey'
                             }
                       }
-    let lineSpace = maxBarHeight / options.lineNumber
+    let lineSpace = maxBarHeight / options.lineNumber;
 
     for (let i = 0; i < options.lineNumber; i++) {
       let $line = $('<div></div>', attributes);
-      $element.append($line);
+      $chartElement.append($line);
       attributes.css.bottom -= lineSpace;
     }
-
   }
 
-  $element.css(options.css);
+
+  makeChartAndTitleAndLabelDivs();
   drawLines();
   drawBars();
-
+  $parentElement.append($chartElement)
 }
 
 
 
-let options =  {css: {height: 500,
+let options =  {spacing: 12,
+                paddingTopPercent: 7,
+                lineNumber: 8,
+                css: {height: 500,
                       width: 500,
                      'background-color': 'lightgrey',
                       position: 'relative'},
-                spacing: 20,
-                paddingTopPercent: 4,
-                lineNumber: 8
               }
 
-drawBarChart([192, 21,30,39,48,57,66], options, $("#chart"))
+drawBarChart([192, 21,130,39,148,57,66], options, $("#chart"))
