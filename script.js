@@ -186,7 +186,7 @@ let options =  {height: 400,
                 lineNumber: 10,
                 valueLabelFontSize: 14,
 
-                title: 'Urine',
+                title: 'Egg',
                 titleLabelFontSize: 27,
 
                 barLabelFontSize: 10,
@@ -194,5 +194,6 @@ let options =  {height: 400,
                'background-color': 'lightgrey'
               };
 
-barchart([1,2,3,4], ['peepee','piss','warmstream','tinkle'],options, $("#chart"))
+barchart([1,2,3,4], ['meow','lol','heh','????'],options, $("#chart"))
+
 
