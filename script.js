@@ -23,7 +23,7 @@ function barchart(data, options, $parentElement) {
   function buildChartElement() {
     let css = {width: options.width * 0.9,
                height: options.height * 0.8,
-               top: options.titleElementHeight,
+               top: options.titleLabelFontSize * 1.5,
                position: 'absolute',
                right: 0,
               }
@@ -96,9 +96,8 @@ function barchart(data, options, $parentElement) {
                             width: options.width * 0.1,
                             height: options.height }
 
-    $titleElement.css(css)
-    $titleElement.css("width")
-    $parentElement.append($titleElement)
+    $valueLabelElement.css(css)
+    $parentElement.append($valueLabelElement)
     buildValueLabels();
   }
 
@@ -111,24 +110,46 @@ function barchart(data, options, $parentElement) {
   }
 
   //TITLE ELEMENT
-  function buildTitleElement() {}
+  function buildTitleElement() {
+    let css = { position:  'absolute',
+                width: options.width,
+                height: options.titleLabelFontSize,//options.titleLabelFontSize * 1.5,
+                'font-size': options.titleLabelFontSize,
+                right: 0,
+                'text-align': 'center',
+                'padding-top': options.titleLabelFontSize * .2,
+
+                };
+    console.log(css)
+    $titleElement.css(css)
+    $titleElement.html(options.title);
+    $parentElement.append($titleElement)
+  }
+
+
+
+
 
   //EXECUTE
   changeParentCSS();
   buildChartElement();
+  buildTitleElement();
   buildValuesElement();
 }
 
 
 
-let options =  {height: 300,
+let options =  {height: 200,
                 width: 500,
                 spacing: 20,
                 lineNumber: 8,
                 valueLabelFontSize: 10,
+
+                title: 'Chart#1',
                 titleLabelFontSize: 20,
+
                 barLabelFontSize: 10,
-                titleElementHeight: 40,
+
                'background-color': 'lightgrey'
               };
 
