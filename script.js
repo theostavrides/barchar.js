@@ -1,4 +1,4 @@
-function barchart(data, options, $parentElement) {
+function barchart(data, barLabels, options, $parentElement) {
   if (!($parentElement instanceof jQuery)) {
     $parentElement = $($parentElement);
   }
@@ -136,20 +136,43 @@ function barchart(data, options, $parentElement) {
     $parentElement.append($titleElement)
   }
 
+  //BAR LABLE ELEMENT
+  function buildBarLabelElement(){
+    let css = { position: 'absolute',
+                width: options.width * 0.9,
+                height: 30,
+                right: 0,
+                bottom: 0
+    }
+    $barLabelElement.css(css)
+    $parentElement.append($barLabelElement)
+    buildBarLabels()
+  }
+
+  function buildBarLabels() {
+    for (let element of barLabels) {
+      let $label = $("<div></div>")
+      $barLabelElement.append($label)
+    }
+  }
+
+
+
 
   //EXECUTE
   changeParentCSS();
   buildChartElement();
   buildTitleElement();
   buildValuesElement();
+  buildBarLabelElement();
 }
 
 
 
 let options =  {height: 400,
-                width: 500,
-                spacing: 20,
-                lineNumber: 16,
+                width: 300,
+                spacing: 4,
+                lineNumber: 10,
                 valueLabelFontSize: 14,
 
                 title: 'Chart#1',
@@ -160,5 +183,5 @@ let options =  {height: 400,
                'background-color': 'lightgrey'
               };
 
-barchart([1,2,3,4,5,6,7,8], options, $("#chart"))
+barchart([1,2,3,4], ['meow','piss','donkey','poo'],options, $("#chart"))
 
