@@ -23,7 +23,7 @@ function barchart(data, barLabels, options, $parentElement) {
   function buildChartElement() {
     let css = {width: options.width * 0.9,
                height: options.height * 0.8,
-               top: options.titleLabelFontSize * 1.6,
+               top: options.height * 0.1,
                position: 'absolute',
                right: 0,
               }
@@ -92,7 +92,7 @@ function barchart(data, barLabels, options, $parentElement) {
 
   function buildValuesElement(){
     let css = { position:  'absolute',
-                            top: options.titleLabelFontSize * 1.5,
+                            top: options.height * 0.1,
                             width: options.width * 0.1,
                             height: $chartElement.css("height")}
 
@@ -105,7 +105,8 @@ function barchart(data, barLabels, options, $parentElement) {
     let max = Math.max(...data)
     for (let i = 0; i < options.lineNumber + 1; i ++) {
       let $label = $("<div></div>");
-      let top = parseInt($($valueLabelElement.siblings()[0]).children()[i].style.bottom) - (options.valueLabelFontSize /2 + 1);
+
+      let top = parseInt($($valueLabelElement.siblings()[0]).children()[i].style.bottom);
       let css = { position: 'absolute',
                   top: top,
                   right: 10,
@@ -124,7 +125,7 @@ function barchart(data, barLabels, options, $parentElement) {
   function buildTitleElement() {
     let css = { position:  'absolute',
                 width: options.width,
-                height: options.titleLabelFontSize,//options.titleLabelFontSize * 1.5,
+                height: options.height * 0.1,//options.titleLabelFontSize * 1.5,
                 'font-size': options.titleLabelFontSize,
                 right: 0,
                 'text-align': 'center',
@@ -138,7 +139,7 @@ function barchart(data, barLabels, options, $parentElement) {
   function buildBarLabelElement(){
     let css = { position: 'absolute',
                 width: options.width * 0.9,
-                height: 30,
+                height: options.height * 0.1,
                 right: 0,
                 bottom: 0
     }
@@ -250,15 +251,15 @@ function animateBarchart(dataSet, barLabels, options, $parentElement) {
 
 }
 
-let options =  {height: 600,
-                width: 900,
-                spacing: 20,
+let options =  {height: 500,
+                width: 500,
+                spacing: 10,
                 lineNumber: 6,
-                valueLabelFontSize: 16,
+                valueLabelFontSize: 20,
                 decimalRound: 0,
                 title: 'Egg',
-                titleLabelFontSize: 27,
-                barLabelFontSize: 20,
+                titleLabelFontSize: 40,
+                barLabelFontSize: 6,
                'background-color': 'lightgrey'
               };
 
