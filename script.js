@@ -23,7 +23,7 @@ function barchart(data, options, $parentElement) {
   function buildChartElement() {
     let css = {width: options.width * 0.9,
                height: options.height * 0.8,
-               top: options.height * 0.1,
+               top: options.titleElementHeight,
                position: 'absolute',
                right: 0,
               }
@@ -36,8 +36,7 @@ function barchart(data, options, $parentElement) {
   function getBarHeight(bar) {
     let chartHeight = parseFloat($chartElement.css("height"))
     let ratio = bar / Math.max(...data);
-    let paddingTop = options.paddingTopPercent * chartHeight / 100;
-    let height = (chartHeight - paddingTop) * ratio;
+    let height = chartHeight * ratio;
     return height;
   }
 
@@ -73,8 +72,7 @@ function barchart(data, options, $parentElement) {
   function drawLines(){
     let chartHeight = parseFloat($chartElement.css("height"))
     let chartWidth = parseFloat($chartElement.css("width"))
-    let paddingTop = options.paddingTopPercent * chartHeight / 100;
-    let maxBarHeight = chartHeight - paddingTop;
+    let maxBarHeight = chartHeight;
     let attributes =  {css: {position: 'absolute',
                              height: 1,
                              width: chartWidth,
@@ -91,9 +89,9 @@ function barchart(data, options, $parentElement) {
     }
   }
 
-  //TITLE DIV
+  //VALUES ELEMENT
 
-  function buildTitleElement(){
+  function buildValuesElement(){
     let css = { position:  'absolute',
                             width: options.width * 0.1,
                             height: options.height }
@@ -112,10 +110,13 @@ function barchart(data, options, $parentElement) {
 
   }
 
+  //TITLE ELEMENT
+  function buildTitleElement() {}
+
   //EXECUTE
   changeParentCSS();
   buildChartElement();
-  buildTitleElement();
+  buildValuesElement();
 }
 
 
@@ -123,11 +124,11 @@ function barchart(data, options, $parentElement) {
 let options =  {height: 300,
                 width: 500,
                 spacing: 20,
-                paddingTopPercent: 2,
                 lineNumber: 8,
                 valueLabelFontSize: 10,
-                litleLabelFontSize: 20,
+                titleLabelFontSize: 20,
                 barLabelFontSize: 10,
+                titleElementHeight: 40,
                'background-color': 'lightgrey'
               };
 
