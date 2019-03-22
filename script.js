@@ -111,7 +111,7 @@ function barchart(data, barLabels, options, $parentElement) {
                   right: 10,
                   'font-size': options.valueLabelFontSize}
       $label.css(css)
-      let currentVal = i * max / options.lineNumber;
+      let currentVal = (i * max / options.lineNumber).toFixed(options.decimalRound);
       $label.html(currentVal)
       $valueLabelElement.append($label)
 
@@ -161,7 +161,6 @@ function barchart(data, barLabels, options, $parentElement) {
       $barLabelElement.append($label)
       let currentWidth = parseFloat($label.css("width"));
       let desiredLeft = parseFloat($label.css("left")) - currentWidth / 2
-      console.log(desiredLeft)
       $label.css("left", desiredLeft)
       css.left += barWidth + options.spacing;
     }
@@ -179,21 +178,89 @@ function barchart(data, barLabels, options, $parentElement) {
 }
 
 
+// DATA GENERATORS
+function createRandomArrData(arrLen, valueMax){
+  let newArr = [];
 
-let options =  {height: 400,
-                width: 700,
-                spacing: 40,
-                lineNumber: 10,
-                valueLabelFontSize: 14,
+  function randomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+  }
 
+  for (let i = 0; i < arrLen; i++) {
+    newArr.push(randomInt(valueMax))
+  }
+
+  return newArr
+}
+
+function createRandomDataSet(arrLen, valueMax, n) {
+  let dataSet = [];
+  for (let i = 0; i < n; i++) {
+    dataSet.push(createRandomArrData(arrLen, valueMax))
+  }
+  return dataSet
+}
+
+//ANIMATOR
+function getArrayWithBiggestValue(arr) {
+  let max = 0;
+  let arrayIndex = 0;
+  let currentMax = 0;
+  for (let i = 0; i < arr.length; i++) {
+    currentMax = Math.max(...arr[i]);
+    if (currentMax > max) {
+      max = currentMax;
+      arrayIndex = i;
+    }
+  }
+  return arr[arrayIndex]
+}
+
+function animateBarchart(dataSet, barLabels, options, $parentElement) {
+  let biggest = getArrayWithBiggestValue(dataSet);
+  barchart(biggest, barLabels, options, $parentElement);
+  let $barsAndLines = $parentElement.children().eq(0).children();
+  let chartHeightPixels = parseFloat($barsAndLines.parent().css("height"));
+
+  function * dataSetGenerator(dataSet) {
+    for (let i = 0; i < dataSet.length; i ++) {
+      yield dataSet[i]
+    }
+  }
+
+  const nextValues = dataSetGenerator(dataSet);
+
+  function newState() {
+    let currentValues = nextValues.next().value;
+    for (let i = $barsAndLines.length - biggest.length; i < $barsAndLines.length; i++) {
+      let newHeightValue = currentValues[i - biggest.length - 1]; // PROBLEM HERE
+      let newTop = newHeightValue / Math.max(...biggest) * chartHeightPixels;
+      $($barsAndLines[i]).css("top", newTop)
+      $($barsAndLines[i]).css("height", chartHeightPixels - newTop)
+    }
+  }
+
+  setInterval(function(){
+    newState()
+  }, 1000)
+
+}
+
+let options =  {height: 600,
+                width: 600,
+                spacing: 20,
+                lineNumber: 5,
+                valueLabelFontSize: 16,
+                decimalRound: 1,
                 title: 'Egg',
                 titleLabelFontSize: 27,
-
-                barLabelFontSize: 10,
-
+                barLabelFontSize: 20,
                'background-color': 'lightgrey'
               };
 
-barchart([1,2,3,4], ['meow','lol','heh','????'],options, $("#chart"))
+let randomSet = createRandomDataSet(5, 10, 100);
+animateBarchart(randomSet, ['meow','he','lol','heh','dude'], options, $("#chart"))
+//barchart([1,2,3,4,5], ['chick','meow','lol','heh','dude'],options, $("#chart"));
+
 
 
