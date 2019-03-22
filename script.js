@@ -23,7 +23,7 @@ function barchart(data, options, $parentElement) {
   function buildChartElement() {
     let css = {width: options.width * 0.9,
                height: options.height * 0.8,
-               top: options.titleLabelFontSize * 1.5,
+               top: options.titleLabelFontSize * 1.6,
                position: 'absolute',
                right: 0,
               }
@@ -72,15 +72,14 @@ function barchart(data, options, $parentElement) {
   function drawLines(){
     let chartHeight = parseFloat($chartElement.css("height"))
     let chartWidth = parseFloat($chartElement.css("width"))
-    let maxBarHeight = chartHeight;
     let attributes =  {css: {position: 'absolute',
                              height: 1,
                              width: chartWidth,
-                             bottom: maxBarHeight,
+                             bottom: chartHeight,
                             'background-color': 'grey'
                             }
                       }
-    let lineSpace = maxBarHeight / options.lineNumber;
+    let lineSpace = chartHeight / options.lineNumber;
 
     for (let i = 0; i < options.lineNumber + 1; i++) {
       let $line = $('<div></div>', attributes);
@@ -93,8 +92,9 @@ function barchart(data, options, $parentElement) {
 
   function buildValuesElement(){
     let css = { position:  'absolute',
+                            top: options.titleLabelFontSize * 1.5,
                             width: options.width * 0.1,
-                            height: options.height }
+                            height: $chartElement.css("height")}
 
     $valueLabelElement.css(css)
     $parentElement.append($valueLabelElement)
@@ -102,12 +102,23 @@ function barchart(data, options, $parentElement) {
   }
 
   function buildValueLabels(){
+    let max = Math.max(...data)
+    for (let i = 0; i < options.lineNumber + 1; i ++) {
+      let $label = $("<div></div>");
+      let top = parseInt($($valueLabelElement.siblings()[0]).children()[i].style.bottom) - (options.valueLabelFontSize /2 + 1);
+      let css = { position: 'absolute',
+                  top: top,
+                  right: 10,
+                  'font-size': options.valueLabelFontSize}
+      $label.css(css)
+      let currentVal = i * max / options.lineNumber;
+      $label.html(currentVal)
+      $valueLabelElement.append($label)
 
+    }
   }
 
-  function writeLabels(){
 
-  }
 
   //TITLE ELEMENT
   function buildTitleElement() {
@@ -120,14 +131,10 @@ function barchart(data, options, $parentElement) {
                 'padding-top': options.titleLabelFontSize * .2,
 
                 };
-    console.log(css)
     $titleElement.css(css)
     $titleElement.html(options.title);
     $parentElement.append($titleElement)
   }
-
-
-
 
 
   //EXECUTE
@@ -139,18 +146,19 @@ function barchart(data, options, $parentElement) {
 
 
 
-let options =  {height: 200,
+let options =  {height: 400,
                 width: 500,
                 spacing: 20,
-                lineNumber: 8,
-                valueLabelFontSize: 10,
+                lineNumber: 16,
+                valueLabelFontSize: 14,
 
                 title: 'Chart#1',
-                titleLabelFontSize: 20,
+                titleLabelFontSize: 27,
 
                 barLabelFontSize: 10,
 
                'background-color': 'lightgrey'
               };
 
-barchart([192, 21,130,39,148,57,66,92,52,66,126,25], options, $("#chart"))
+barchart([1,2,3,4,5,6,7,8], options, $("#chart"))
+
