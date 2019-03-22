@@ -220,6 +220,10 @@ function animateBarchart(dataSet, barLabels, options, $parentElement) {
   let biggest = getArrayWithBiggestValue(dataSet);
   barchart(biggest, barLabels, options, $parentElement);
   let $barsAndLines = $parentElement.children().eq(0).children();
+  let $bars = $barsAndLines.filter(function(index) {
+    return index >= $barsAndLines.length - dataSet[0].length
+  })
+
   let chartHeightPixels = parseFloat($barsAndLines.parent().css("height"));
 
   function * dataSetGenerator(dataSet) {
@@ -232,11 +236,11 @@ function animateBarchart(dataSet, barLabels, options, $parentElement) {
 
   function newState() {
     let currentValues = nextValues.next().value;
-    for (let i = $barsAndLines.length - biggest.length; i < $barsAndLines.length; i++) {
-      let newHeightValue = currentValues[i - biggest.length - 1]; // PROBLEM HERE
+    for (let i = 0; i < $bars.length; i++) {
+      let newHeightValue = currentValues[i];
       let newTop = newHeightValue / Math.max(...biggest) * chartHeightPixels;
-      $($barsAndLines[i]).css("top", newTop)
-      $($barsAndLines[i]).css("height", chartHeightPixels - newTop)
+      $($bars[i]).css("top", newTop)
+      $($bars[i]).css("height", chartHeightPixels - newTop)
     }
   }
 
@@ -247,19 +251,20 @@ function animateBarchart(dataSet, barLabels, options, $parentElement) {
 }
 
 let options =  {height: 600,
-                width: 600,
+                width: 900,
                 spacing: 20,
-                lineNumber: 5,
+                lineNumber: 6,
                 valueLabelFontSize: 16,
-                decimalRound: 1,
+                decimalRound: 0,
                 title: 'Egg',
                 titleLabelFontSize: 27,
                 barLabelFontSize: 20,
                'background-color': 'lightgrey'
               };
 
-let randomSet = createRandomDataSet(5, 10, 100);
-animateBarchart(randomSet, ['meow','he','lol','heh','dude'], options, $("#chart"))
+let randomSet = createRandomDataSet(12, 13, 100);
+
+animateBarchart(randomSet, ['a','b','c','d','e','f','g','h','i','j','k','l'], options, $("#chart"))
 //barchart([1,2,3,4,5], ['chick','meow','lol','heh','dude'],options, $("#chart"));
 
 
