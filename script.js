@@ -36,23 +36,23 @@ function drawBarChart(data, options, $element) {
   }
 
   function drawLines(){
-    let maxInput = Math.max(...data);
     let paddingTop = options.paddingTopPercent * options.css.height / 100;
     let maxBarHeight = options.css.height - paddingTop;
-    let attributes = {css: {position: 'absolute',
-                              height: 1,
-                              width: options.css.width,
-                              bottom: maxBarHeight,
-                             'background-color': 'blue'
-                             }
-                       }
+    let attributes =  {css: {position: 'absolute',
+                             height: 1,
+                             width: options.css.width,
+                             bottom: maxBarHeight,
+                            'background-color': 'blue'
+                            }
+                      }
+    let lineSpace = maxBarHeight / options.lineNumber
 
-    for (let i = 0; i < data.length; i++) {
-
-
+    for (let i = 0; i < options.lineNumber; i++) {
+      let $line = $('<div></div>', attributes);
+      $element.append($line);
+      attributes.css.bottom -= lineSpace;
     }
-    let $line = $('<div></div>', attributes);
-    $element.append($line)
+
   }
 
   $element.css(options.css);
