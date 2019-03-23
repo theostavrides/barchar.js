@@ -234,8 +234,6 @@ function animateBarchart(dataSet, barLabels, options, $parentElement) {
     $(val).css({top: chartHeightPixels - newTop, height: newTop})
   })
 
-
-
   function * dataSetGenerator(dataSet) {
     for (let i = 1; i < dataSet.length; i ++) {
       yield dataSet[i]
@@ -245,19 +243,25 @@ function animateBarchart(dataSet, barLabels, options, $parentElement) {
   const nextValues = dataSetGenerator(dataSet);
 
   function newState() {
-    let currentValues = nextValues.next().value;
-    console.log(currentValues)
+    let state = nextValues.next();
+    if (state.done === true) return state;
+    let currentValues = state.value;
     for (let i = 0; i < $bars.length; i++) {
       let newHeightValue = currentValues[i];
       let newTop = newHeightValue / Math.max(...biggest) * chartHeightPixels;
-      console.log(newTop)
       $($bars[i]).animate({top: chartHeightPixels - newTop, height: newTop}, options.animationSpeed/2)
     }
+    return state
   }
   // MUST MAKE BETTER
-  setInterval(function(){
-    newState()
-  }, options.animationSpeed)
+  function animate() {
+    let state = newState();
+    if (!state.done) {
+      setTimeout(animate, options.animationSpeed)
+    }
+
+  }
+  animate()
 
 }
 
@@ -271,12 +275,12 @@ let options =  {height: 400,
                 titleLabelFontSize: 25,
                 barLabelFontSize: 6,
                'background-color': 'lightgrey',
-                animationSpeed: 4000,
+                animationSpeed: 1000,
               };
 
-let randomSet = createRandomDataSet(5, 13, 100);
+let randomSet = createRandomDataSet(6, 131, 1000);
 
-animateBarchart(randomSet, ['a','b','c','d','e'], options, $("#chart"))
+animateBarchart(randomSet, ['a','b','c','d','e','f'], options, $("#chart"))
 //barchart([1,2,3,4,5], ['chick','meow','lol','heh','dude'],options, $("#chart"));
 
 
