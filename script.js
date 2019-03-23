@@ -85,6 +85,7 @@ function barchart(data, barLabels, options, $parentElement) {
       let $line = $('<div></div>', attributes);
       $chartElement.append($line);
       attributes.css.bottom -= lineSpace;
+
     }
   }
 
@@ -105,8 +106,8 @@ function barchart(data, barLabels, options, $parentElement) {
     let max = Math.max(...data)
     for (let i = 0; i < options.lineNumber + 1; i ++) {
       let $label = $("<div></div>");
-
-      let top = parseInt($($valueLabelElement.siblings()[0]).children()[i].style.bottom);
+      let top = parseInt($($valueLabelElement.siblings()[0]).children()[i].style.bottom)
+                - (options.valueLabelFontSize/2 + 2);
       let css = { position: 'absolute',
                   top: top,
                   right: 10,
@@ -251,14 +252,14 @@ function animateBarchart(dataSet, barLabels, options, $parentElement) {
 
 }
 
-let options =  {height: 500,
-                width: 500,
-                spacing: 10,
-                lineNumber: 6,
-                valueLabelFontSize: 20,
+let options =  {height: 400,
+                width: 400,
+                spacing: 5,
+                lineNumber: 10,
+                valueLabelFontSize: 15,
                 decimalRound: 0,
-                title: 'Egg',
-                titleLabelFontSize: 40,
+                title: 'DEATHS',
+                titleLabelFontSize: 25,
                 barLabelFontSize: 6,
                'background-color': 'lightgrey'
               };
