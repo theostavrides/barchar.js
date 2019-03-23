@@ -225,11 +225,19 @@ function animateBarchart(dataSet, barLabels, options, $parentElement) {
   let $bars = $barsAndLines.filter(function(index) {
     return index >= $barsAndLines.length - dataSet[0].length
   })
-
   let chartHeightPixels = parseFloat($barsAndLines.parent().css("height"));
+  let firstChartValues = dataSet[0]
+
+  $bars.each(function(i, val){
+    let newHeightValue = firstChartValues[i];
+    let newTop = newHeightValue / Math.max(...biggest) * chartHeightPixels;
+    $(val).css({top: chartHeightPixels - newTop, height: newTop})
+  })
+
+
 
   function * dataSetGenerator(dataSet) {
-    for (let i = 0; i < dataSet.length; i ++) {
+    for (let i = 1; i < dataSet.length; i ++) {
       yield dataSet[i]
     }
   }
@@ -238,35 +246,37 @@ function animateBarchart(dataSet, barLabels, options, $parentElement) {
 
   function newState() {
     let currentValues = nextValues.next().value;
+    console.log(currentValues)
     for (let i = 0; i < $bars.length; i++) {
       let newHeightValue = currentValues[i];
       let newTop = newHeightValue / Math.max(...biggest) * chartHeightPixels;
-      $($bars[i]).css("top", newTop)
-      $($bars[i]).css("height", chartHeightPixels - newTop)
+      console.log(newTop)
+      $($bars[i]).animate({top: chartHeightPixels - newTop, height: newTop}, options.animationSpeed/2)
     }
   }
-
+  // MUST MAKE BETTER
   setInterval(function(){
     newState()
-  }, 1000)
+  }, options.animationSpeed)
 
 }
 
 let options =  {height: 400,
                 width: 400,
                 spacing: 5,
-                lineNumber: 10,
+                lineNumber: 6,
                 valueLabelFontSize: 15,
                 decimalRound: 0,
                 title: 'DEATHS',
                 titleLabelFontSize: 25,
                 barLabelFontSize: 6,
-               'background-color': 'lightgrey'
+               'background-color': 'lightgrey',
+                animationSpeed: 4000,
               };
 
-let randomSet = createRandomDataSet(12, 13, 100);
+let randomSet = createRandomDataSet(5, 13, 100);
 
-animateBarchart(randomSet, ['a','b','c','d','e','f','g','h','i','j','k','l'], options, $("#chart"))
+animateBarchart(randomSet, ['a','b','c','d','e'], options, $("#chart"))
 //barchart([1,2,3,4,5], ['chick','meow','lol','heh','dude'],options, $("#chart"));
 
 
